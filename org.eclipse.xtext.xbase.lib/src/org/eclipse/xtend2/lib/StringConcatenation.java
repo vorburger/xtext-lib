@@ -120,7 +120,9 @@ public class StringConcatenation implements CharSequence {
 	protected void append(Object object, int index) {
 		if (object == null)
 			return;
-		if (object instanceof StringConcatenation) {
+		if (object instanceof String) {
+			append((String)object, index);
+		} else if (object instanceof StringConcatenation) {
 			StringConcatenation other = (StringConcatenation) object;
 			appendSegments(index, other.getSignificantContent(), other.lineDelimiter);
 			return;
@@ -130,15 +132,7 @@ public class StringConcatenation implements CharSequence {
 			return;
 		} else {
 			String value = getStringRepresentation(object);
-			if (value != null) {
-				int initial = initialSegmentSize(value);
-				if (initial != value.length()) {
-					List<String> newSegments = continueSplitting(value, initial, value.length());
-					appendSegments(index, newSegments, lineDelimiter);
-				} else {
-					appendSegment(index, value, lineDelimiter);
-				}
-			}
+			append(value, index);
 		}
 	}
 
@@ -173,7 +167,9 @@ public class StringConcatenation implements CharSequence {
 		}
 		if (object == null)
 			return;
-		if (object instanceof StringConcatenation) {
+		if (object instanceof String) {
+			append((String)object,index);
+		} else if (object instanceof StringConcatenation) {
 			StringConcatenation other = (StringConcatenation) object;
 			List<String> otherSegments = other.getSignificantContent();
 			appendSegments(indentation, index, otherSegments, other.lineDelimiter);
@@ -182,15 +178,17 @@ public class StringConcatenation implements CharSequence {
 			other.appendTo(new IndentedTarget(this, indentation, index));
 		} else {
 			String value = getStringRepresentation(object);
-			if (value != null) {
-				int initial = initialSegmentSize(value);
-				if (initial != value.length()) {
-					List<String> newSegments = continueSplitting(value, initial, value.length());
-					appendSegments(indentation, index, newSegments, lineDelimiter);
-				} else {
-					appendSegment(indentation, index, value, lineDelimiter);
-				}
-			}
+			append(value,index);
+		}
+	}
+
+	private void append(String value, int index) {
+		int initial = initialSegmentSize(value);
+		if (initial != value.length()) {
+			List<String> newSegments = continueSplitting(value, initial, value.length());
+			appendSegments(index, newSegments, lineDelimiter);
+		} else {
+			appendSegment(index, value, lineDelimiter);
 		}
 	}
 

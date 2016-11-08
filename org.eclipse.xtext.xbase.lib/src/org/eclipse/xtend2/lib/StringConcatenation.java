@@ -254,7 +254,7 @@ public class StringConcatenation implements CharSequence {
 		cachedToString = null;
 	}
 
-	protected int appendSegment(String indentation, int index, String otherSegment, String otherDelimiter) {
+	private int appendSegment(String indentation, int index, String otherSegment, String otherDelimiter) {
 		if (otherDelimiter.equals(otherSegment)) {
 			if (index != segments.size()) {
 				segments.add(index++, lineDelimiter);
@@ -276,12 +276,12 @@ public class StringConcatenation implements CharSequence {
 		return index;
 	}
 
-	protected void appendSegment(int index, String otherSegment) {
+	private void appendSegment(int index, String otherSegment) {
 		segments.add(index, otherSegment);
 		cachedToString = null;
 	}
 
-	protected void appendSegment(int index, String otherSegment, String otherDelimiter) {
+	private void appendSegment(int index, String otherSegment, String otherDelimiter) {
 		if (otherDelimiter.equals(lineDelimiter)) {
 			appendSegment(index, otherSegment);
 		} else {
@@ -479,7 +479,7 @@ public class StringConcatenation implements CharSequence {
 		return toString().subSequence(start, end);
 	}
 
-	protected int initialSegmentSize(String text) {
+	private int initialSegmentSize(String text) {
 		int length = text.length();
 		int idx = 0;
 		while (idx < length) {
@@ -493,7 +493,7 @@ public class StringConcatenation implements CharSequence {
 		return idx;
 	}
 
-	protected List<String> continueSplitting(String text, int idx, int length) {
+	private List<String> continueSplitting(String text, int idx, int length) {
 		int nextLineOffset = 0;
 		List<String> result = new ArrayList<String>(5);
 		while (idx < length) {
